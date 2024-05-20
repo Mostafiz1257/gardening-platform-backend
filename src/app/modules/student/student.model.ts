@@ -53,6 +53,7 @@ const localGuardianSchema = new Schema<LocalGuardian>({
   occupation: { type: String },
   contract: { type: String },
 });
+
 const studentSchema = new Schema<TStudent, StudentModel>(
   {
     id: { type: String, required: true, unique: true },
