@@ -1,3 +1,5 @@
+import { USER_ROLE } from "./user.constant";
+
 export interface IUser {
     _id: string;           // Unique identifier for the user
     name: string;          // User's full name
@@ -15,5 +17,6 @@ export interface IUser {
     updatedAt: Date;       // Date when the user information was last updated
   }
   
+  export type TUserRole = keyof typeof USER_ROLE;
 
   
