@@ -1,0 +1,67 @@
+import mongoose from "mongoose";
+
+const Schema = mongoose.Schema;
+
+const userSchema = new Schema({
+  name: {
+    type: String,
+    required: true, 
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  profileImage: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  address: {
+    type: String,
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user',
+  },
+  isPremium: {
+    type: Boolean,
+    default: false,
+  },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
+  followers: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  }],
+  following: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  }],
+  createdAt: {
+    type: Date,
+    default: Date.now, // Automatically sets current date
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  }
+});
+
+// Automatically update `updatedAt` when document is modified
+userSchema.pre('save', function(next) {
+  this.updatedAt = new Date(); // Ensure updatedAt is a Date object
+  next();
+});
+
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;
