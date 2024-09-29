@@ -1,1 +1,1 @@
-#This is a backend e-commerce project.Updating----
+Gardening platform backend project will be upload as soon as possible.
