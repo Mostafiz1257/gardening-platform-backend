@@ -7,7 +7,7 @@ return result
 }
 
 const updateCommentIntoDb = async(id:string,updateData:Partial<IComment>)=>{
-const result = await Comment.findByIdAndUpdate(id,updateData)
+const result = await Comment.findByIdAndUpdate(id,updateData,{new:true})
 return result;
 
 }
