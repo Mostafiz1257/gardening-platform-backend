@@ -1,8 +1,9 @@
-import mongoose from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
+import { IUser } from "./user.interface";
 
-const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
+
+const userSchema = new Schema<IUser>({
   name: {
     type: String,
     required: true, 
@@ -62,6 +63,4 @@ userSchema.pre('save', function(next) {
   next();
 });
 
-const User = mongoose.model('User', userSchema);
-
-module.exports = User;
+export const User = model<IUser>('User', userSchema);

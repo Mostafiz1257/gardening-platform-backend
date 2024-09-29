@@ -9,11 +9,14 @@ app.use(express.json());
 app.use(cors());
 
 //application routes
+
 app.use('/',router)
 
 const getAController = (req: Request, res: Response) => {
   res.send('Gardening tricks and tips platform backend server is running.');
 };
+
+
 app.get('/', getAController);
 
 app.use((req: Request, res: Response) => {

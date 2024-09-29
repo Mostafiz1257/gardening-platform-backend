@@ -1,13 +1,12 @@
 import { z } from 'zod';
 
 const userValidationSchema = z.object({
-  name: z.string().min(1, { message: 'Name is required.' }), // Ensure the name is not empty
+  body:z.object({
+    name: z.string({ message: 'Enter your name.' }), // Ensure the name is not empty
 
   email: z
     .string()
-    .email({ message: 'Invalid email address.' }) // Validate email format
-    .min(1, { message: 'Email is required.' }) // Ensure the email is not empty
-    .max(100, { message: 'Email must be less than 100 characters.' }), // Optional: Limit email length
+    .email({ message: 'Invalid email address.' }), // Optional: Limit email length
 
   password: z
     .string()
@@ -25,6 +24,7 @@ const userValidationSchema = z.object({
       message: "Role must be either 'user' or 'admin'.",
     })
     .default('user'), // Default role is 'user'
+  })
 });
 
 export const UserValidation = {
