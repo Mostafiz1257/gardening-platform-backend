@@ -7,8 +7,8 @@ const PostSchema: Schema = new Schema(
     title: { type: String, required: true },
     content: { type: String, required: true },
     image: {
-      type: String,
-      default: null,
+      type: [String], // Array of strings
+      default: [],
     },
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     category: { type: String, required: true },
