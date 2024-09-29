@@ -1,14 +1,13 @@
-//implement json web token for authorization.
-import jwt, { JwtPayload } from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
-import { TUserRole } from '../modules/user/user.interface';
 import catchAsync from '../utils/catchAsync';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../config';
+import { TUserRole } from '../modules/user/user.interface';
 
-const auth = (...requiredRoles: TUserRole[]) => {
-  return catchAsync(async (req: Request, res: Response, next:NextFunction) => {
+const auth = (...requiredRole: TUserRole[]) => {
+  return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
-    if (!authHeader || authHeader.startsWith('Bearer ')) {
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({
         success: false,
         statusCode: 401,
@@ -17,6 +16,8 @@ const auth = (...requiredRoles: TUserRole[]) => {
     }
 
     const token = authHeader.split(' ')[1];
+
+    // Check if the token is valid
     jwt.verify(token, config.jwt_access_secret as string, (err, decoded) => {
       if (err) {
         return res.status(401).json({
@@ -27,12 +28,12 @@ const auth = (...requiredRoles: TUserRole[]) => {
       }
 
       const role = (decoded as JwtPayload).role;
-      if(requiredRoles.length && !requiredRoles.includes(role)){
+      if (requiredRole.length && !requiredRole.includes(role)) {
         return res.status(401).json({
-            success: false,
-            statusCode: 401,
-            message: 'You have no access to this route',
-          });
+          success: false,
+          statusCode: 401,
+          message: 'You have no access to this route',
+        });
       }
       req.user = decoded as JwtPayload;
       next();
@@ -41,3 +42,5 @@ const auth = (...requiredRoles: TUserRole[]) => {
 };
 
 export default auth;
+
+
