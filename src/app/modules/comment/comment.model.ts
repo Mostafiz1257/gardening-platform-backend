@@ -1,30 +1,14 @@
-// comment.model.ts
-import mongoose, { Schema, Document } from 'mongoose';
-import { IComment } from './comment.interface';
+import { Schema, model } from "mongoose";
+import { IComment } from "./comment.interface";
 
-const commentSchema: Schema = new Schema({
-  post: {
-    type: Schema.Types.ObjectId,
-    ref: 'Post',
-    required: true,
+const commentSchema = new Schema<IComment>(
+  {
+    author: { type: Schema.Types.ObjectId, ref: "User", required: true }, // User reference
+    commentText: { type: String,}, // Comment content
+    commentImage: { type: String },
+    // replies: [{ type: Schema.Types.ObjectId, ref: "Comment" }],  // Nested replies
   },
-  author: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  content: {
-    type: String,
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  { timestamps: true } // Automatically adds createdAt and updatedAt
+);
 
-export const Comment = mongoose.model<IComment & Document>('Comment', commentSchema);
+export const Comment = model<IComment>("Comment", commentSchema);

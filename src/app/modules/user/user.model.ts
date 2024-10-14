@@ -1,12 +1,11 @@
-import mongoose, { model, Schema } from "mongoose";
-import { IUser } from "./user.interface";
-
-
+import mongoose, { model, Schema } from 'mongoose';
+import { IUser } from './user.interface';
 
 const userSchema = new Schema<IUser>({
+
   name: {
     type: String,
-    required: true, 
+    required: true,
   },
   email: {
     type: String,
@@ -39,26 +38,31 @@ const userSchema = new Schema<IUser>({
     type: Boolean,
     default: false,
   },
-  followers: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  }],
-  following: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  }],
+  followers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
+  following: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
   createdAt: {
     type: Date,
-    default: Date.now, // Automatically sets current date
+    default: Date.now,
   },
   updatedAt: {
     type: Date,
     default: Date.now,
-  }
+  },
+  favorites: [{ type: Schema.Types.ObjectId, ref: 'Favorite' }],
 });
 
 // Automatically update `updatedAt` when document is modified
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function (next) {
   this.updatedAt = new Date(); // Ensure updatedAt is a Date object
   next();
 });

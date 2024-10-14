@@ -14,8 +14,14 @@ const createPost = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllPost = catchAsync(async (req: Request, res: Response) => {
-  const result = await PostService.getAllPostFromDb();
-  sendResponse(res, {
+
+  const { search, filter } = req.query;
+
+  const result = await PostService.getAllPostFromDb(
+    search as string,
+    filter as string
+  );
+    sendResponse(res, {
     statusCode: 200,
     success: true,
     message: 'retrieved all post successfully',
@@ -35,6 +41,17 @@ const updatePost = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getMyPost = catchAsync(async(req:Request,res:Response)=>{
+const userId = req.params.id;
+const result = await PostService.getMyPostFromDb(userId)
+sendResponse(res, {
+  statusCode: 200,
+  success: true,
+  message: 'My all post is here',
+  data: result,
+});
+})
+
 const deletePost = catchAsync(async (req: Request, res: Response) => {
   const postId = req.params.id;
   const result = await PostService.deletePostFromDb(postId);
@@ -51,4 +68,5 @@ export const PostController = {
   getAllPost,
   updatePost,
   deletePost,
+  getMyPost
 };

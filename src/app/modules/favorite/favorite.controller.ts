@@ -1,49 +1,87 @@
-import { Request,Response } from "express"
-import catchAsync from "../../utils/catchAsync"
-import { FavoritePostService } from "./favorite.service"
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
+import { FavoriteServices } from "./favorite.service";
 
-const createFavoritePost = catchAsync(async(req:Request,res:Response)=>{
-const result = await FavoritePostService.createFavoritePostIntoDb(req.body);
 
-sendResponse(res, {
+// Create Favorite
+const createFavorite = catchAsync(async (req, res) => {
+  const { user, post} = req.body;
+ 
+
+  const result = await FavoriteServices.createFavoriteIntoDB(user, post);
+
+  sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: 'Save to favorite gallery',
+    message: "Successfully added post to favorites",
     data: result,
   });
-})
+});
 
+const getAllFavorite = catchAsync(async (req, res) => {
+  const { userId } = req.body;
 
-const deleteFavoritePost = catchAsync(async(req:Request,res:Response)=>{
-const id = req.params.id;
-const result = FavoritePostService.deleteFavoritePostFromDb(id);
-sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: 'Remove from your favorite post',
-    data: result,
-  });
-})
+  const result = await FavoriteServices.getAllFavoriteFromDB(userId);
 
-
-const getMyFavoritePost = catchAsync(async (req: Request, res: Response) => {
-    const userId = req.params.userId; 
-    const result = await FavoritePostService.getMyFavoritePostFromDb(userId);
-  
+  if (!result) {
     sendResponse(res, {
-      statusCode: 200,
+      statusCode: 404,
       success: true,
-      message: "Favorite posts fetched successfully",
+      message: "not found favorite posts",
       data: result,
     });
+  }
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Successfully Retrieved favorites post",
+    data: result,
   });
+});
+
+// Delete Favorite
+const deleteFavorite = catchAsync(async (req, res, next) => {
+  const { user, post } = req.body;
+
+  const result = await FavoriteServices.deleteFavoriteFromDB(user, post);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Successfully removed post from favorites",
+    data: result,
+  });
+});
+
+const getAllMyFavorite = catchAsync(async (req, res) => {
+  const { userId } = req.params;  // Get userId from params
+
+  const result = await FavoriteServices.getAllFavoriteFromDB(userId);
+
+  if (!result || result.length === 0) {
+    return sendResponse(res, {
+      statusCode: 404,
+      success: false,
+      message: "No favorite posts found",
+      data: result,
+    });
+  }
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Successfully retrieved favorite posts",
+    data: result,
+  });
+});
 
 
-
-
-export const FavoritePostController ={
-createFavoritePost,
-deleteFavoritePost,
-getMyFavoritePost
-}
+export const FavoriteControllers = {
+  createFavorite,
+  deleteFavorite,
+  getAllFavorite,
+  getAllMyFavorite
+};

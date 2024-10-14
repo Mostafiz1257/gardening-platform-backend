@@ -8,12 +8,14 @@ import { USER_ROLE } from '../user/user.constant';
 
 const router = express.Router();
 
-router.post('/',auth(USER_ROLE.user),validateRequest(postValidation.postValidationSchema),PostController.createPost)
+router.post('/',validateRequest(postValidation.postValidationSchema),PostController.createPost)
 
 router.get('/', PostController.getAllPost)
 
-router.patch('/:id',auth(USER_ROLE.user),validateRequest(postValidation.updatePostValidationSchema),PostController.updatePost)
+router.patch('/:id',validateRequest(postValidation.updatePostValidationSchema),PostController.updatePost)
 
-router.delete('/:id',auth(USER_ROLE.user),PostController.deletePost)
+router.get('/:id',PostController.getMyPost)
+
+router.delete('/:id',PostController.deletePost)
 
 export const PostRouter = router;

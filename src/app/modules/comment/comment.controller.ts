@@ -1,42 +1,93 @@
-import { Request, Response } from 'express';
-import catchAsync from '../../utils/catchAsync';
-import { CommentService } from './comment.service';
-import sendResponse from '../../utils/sendResponse';
 
-const createComment = catchAsync(async (req: Request, res: Response) => {
-  const result = await CommentService.createCommentIntoDb(req.body);
+import sendResponse from "../../utils/sendResponse";
+import catchAsync from "../../utils/catchAsync";
+import { CommentServices } from "./comment.service";
+
+
+const createComment = catchAsync(async (req, res) => {
+  const { author, commentText, commentImage } = req.body;
+  const { postId } = req.params;
+
+  const result = await CommentServices.createCommentIntoDB(
+    postId,
+    author,
+    commentText,
+    commentImage
+  );
+
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: 'You comment here',
+    message: "Successfully added comment",
     data: result,
   });
 });
 
-const updateComment = catchAsync(async (req: Request, res: Response) => {
-  const id = req.params.id;
-  const result = await CommentService.updateCommentIntoDb(id, req.body);
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: 'You updated your comment',
-    data: result,
-  });
-});
+const updateComment = catchAsync(async (req, res) => {
+  const {commentId, commentText, author, commentImage} = req.body; 
 
-const deleteComment = catchAsync(async (req: Request, res: Response) => {
-    const id = req.params.bind;
-    const  result = CommentService.deleteCommentFromDb(id)
+  try {
+    const result = await CommentServices.updateCommentInDB(commentId, author, {
+      commentText,
+      commentImage,
+    });
+
     sendResponse(res, {
-        statusCode: 200,
-        success: true,
-        message: 'You deleted your',
-        data: result,
-      });
+      statusCode: 200,
+      success: true,
+      message: "Successfully updated comment",
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
-export const CommentController = {
+const deleteComment = catchAsync(async (req, res) => {
+  const { authorId, commentId } = req.body; 
+
+  try {
+    const result = await CommentServices.deleteCommentInDB(commentId, authorId);
+
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Successfully deleted comment",
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+const addReply = catchAsync(async (req, res) => {
+  const { commentId, replyId } = req.body;
+  const result = await CommentServices.addReplyToComment(commentId, replyId);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Reply successfully added to comment",
+    data: result,
+  });
+});
+
+const getComments = catchAsync(async (req, res) => {
+  const { postId } = req.params;
+  const result = await CommentServices.getCommentsByPostId(postId);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Successfully fetched comments",
+    data: result,
+  });
+});
+
+export const CommentControllers = {
   createComment,
   updateComment,
+  addReply,
+  getComments,
   deleteComment,
 };

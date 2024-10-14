@@ -11,11 +11,27 @@ const PostSchema: Schema = new Schema(
       default: [],
     },
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    favorite: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Favorite",
+      },
+    ],
     category: { type: String, required: true },
     isPremium: { type: Boolean, default: false },
-    upvotes: { type: Number, default: 0 },
-    downvotes: { type: Number, default: 0 },
-    comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }], // Assuming you have a Comment model
+    likes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Like",
+      },
+    ], 
+    dislikes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Dislike",
+      },
+    ],
+    comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }], 
   },
   {
     timestamps: true,

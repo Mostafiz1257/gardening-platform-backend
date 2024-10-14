@@ -4,6 +4,9 @@ import { UserRouter } from '../modules/user/user.route';
 import { PostRouter } from '../modules/post/post.route';
 import { PostCommentRouter } from '../modules/comment/commnet.route';
 import { FavoritePostRouter } from '../modules/favorite/favorite.route';
+import { LikeRoutes } from '../modules/like/like.route';
+import { DisLikeRoutes } from '../modules/disLike/disLike.route';
+import { PaymentRouters } from '../modules/payment/payment.route';
 
 const router = Router();
 
@@ -21,12 +24,25 @@ const moduleRoute = [
     router: PostRouter,
   },
   {
-    path: '/api/post/comment',
+    path: '/api/comment',
     router: PostCommentRouter,
+  },
+  {
+    path: "/api/likes",
+    router: LikeRoutes,
+  },
+  {
+    path: "/api/dislikes",
+    router: DisLikeRoutes,
   },
   {
     path:'/api/post/favorite',
     router:FavoritePostRouter
+  }
+  ,
+  {
+    path:'/api/payment',
+    router:PaymentRouters
   }
 ];
 

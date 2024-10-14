@@ -9,5 +9,10 @@ export default {
   bcrypt_salt_rounds:process.env.BCRYPT_SALT_ROUND,
   jwt_access_secret:process.env.JWT_ACCESS_SECRET,
   jwt_refresh_secret:process.env.JWT_REFRESH_SECRET,
-  jwt_access_expires_in: process.env.JWT_ACCESS_EXPIREs_IN
+  jwt_access_expires_in: process.env.JWT_ACCESS_EXPIREs_IN,
+  reset_pass_ui_link:process.env.RESET_PASS_UI_LINK,
+  store_id:process.env.STORE_ID,
+  base_url:process.env.BASE_URL,
+  signature_key:process.env.SIGNATURE_KEY
+
 };

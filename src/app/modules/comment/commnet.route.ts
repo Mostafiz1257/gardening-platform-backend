@@ -1,12 +1,16 @@
 import express from 'express'
-import { CommentController } from './comment.controller';
+import { CommentControllers } from './comment.controller';
+
 const router  = express.Router();
 
-router.post('/',CommentController.createComment)
+// Create a new comment for a post
+router.post("/:postId", CommentControllers.createComment);
 
-router.patch('/:id',CommentController.updateComment)
+// Update a specific comment
+router.patch("/update", CommentControllers.updateComment);
 
-router.delete('/:id',CommentController.deleteComment)
+// delete comment
+router.delete("/delete", CommentControllers.deleteComment);
 
 
 export const PostCommentRouter = router;
